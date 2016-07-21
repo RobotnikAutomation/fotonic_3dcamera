@@ -1,0 +1,20 @@
+image_width: 160
+image_height: 120
+camera_name: fotonic_3dcamera
+camera_matrix:
+  rows: 3
+  cols: 3
+  data: [142.870582, 0, 80.402796, 0, 142.960377, 62.287747, 0, 0, 1]
+distortion_model: plumb_bob
+distortion_coefficients:
+  rows: 1
+  cols: 5
+  data: [-0.533182, 0.296303, 0.001343, 0.004612, 0]
+rectification_matrix:
+  rows: 3
+  cols: 3
+  data: [1, 0, 0, 0, 1, 0, 0, 0, 1]
+projection_matrix:
+  rows: 3
+  cols: 4
+  data: [115.50032, 0, 81.368195, 0, 0, 127.121597, 62.477824, 0, 0, 0, 1, 0]

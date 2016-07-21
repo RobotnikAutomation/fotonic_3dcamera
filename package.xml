@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<package>
+  <name>fotonic_3dcamera</name>
+  <version>0.0.0</version>
+  <description>
+	   The fotonic_3dcamera package reads the pointclouds and image from the fotonic E70P cameras and publishes PointCloud, PointCloud2 and Image topics
+  </description>
+
+  <!-- One maintainer tag required, multiple allowed, one person per tag --> 
+  <maintainer email="inf@robotnik.es">Robotnik</maintainer>
+
+
+  <!-- One license tag required, multiple allowed, one license per tag -->
+  <license>BSD</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <!-- build_depend>robotnik_msgs</build_depend -->
+  <build_depend>roscpp</build_depend>
+  <build_depend>tf</build_depend>
+  <build_depend>std_msgs</build_depend>  
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>image_transport</build_depend>
+  <build_depend>cv_bridge</build_depend>
+  <build_depend>camera_info_manager</build_depend>
+   
+  <run_depend>roscpp</run_depend>
+  <run_depend>tf</run_depend>
+  <run_depend>std_msgs</run_depend>  
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>image_transport</run_depend>
+  <run_depend>cv_bridge</run_depend>
+  <run_depend>camera_info_manager</run_depend>
+  
+  <!-- The export tag contains other, unspecified, tags -->
+  <export>
+    <!-- You can specify that this package is a metapackage here: -->
+    <!-- <metapackage/> -->
+    <!-- Other tools can request additional information be placed here -->
+  </export>
+</package>

@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<launch>
+
+  <node pkg="tf" type="static_transform_publisher" name="fake_localize" args="0.0 0.0 0.0 0.0 1.57075 0.0 base_link fotonic_link_optical 10"/>
+
+  <node pkg="fotonic_3dcamera" type="fotonic_3dcamera_node" name="fotonic_3dcamera_node" output="screen">
+<!--
+      <param name="ip_address" value="192.168.1.10" />
+-->
+      <param name="ip_address" value="172.16.7.198" />
+      <param name="base_frame_id" value="base_link" />
+      <param name="fotonic_frame_id" value="fotonic_link_optical" />
+      <!--Sensor parameters-->
+<!--
+      <param name="sensor_shutter_ms" value="10.0" /> 
+-->
+      <param name="sensor_shutter_ms" value="1.0" /> 
+      <param name="sensor_framerate" value="40" /> 
+      <param name="sensor_framerate_divisor" value="1" />
+      <!--Hardware filters-->
+      <param name="lerp_filter_enable" value="false" />
+      <param name="edge_filter_enable" value="false" />
+      <param name="edge_filter_minB" value="1" />
+      <param name="edge_filter_diff1" value="10" />
+      <param name="edge_filter_diff2" value="10" />
+      <param name="edge_filter_diff3" value="20" />
+      <!--Software filters-->
+      <param name="active_brightness_min" value="100" /> 
+      <param name="active_brightness_max" value="4095" />
+      <param name="z_range_min" value="150" /> 
+      <param name="z_range_max" value="8000" />
+      <param name="pre_zfilterx_enable" value="false" />
+      <param name="pre_zfiltery_enable" value="false" />
+      <param name="pre_zfilter_depth" value="150" />
+      <param name="noise_filter_enable" value="false" />
+      <param name="noise_filter_radius" value="10" />
+      <param name="noise_filter_depth" value="10" />
+      <param name="noise_filter_pixels" value="20" />
+  </node>
+
+
+</launch>
