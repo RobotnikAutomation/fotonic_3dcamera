@@ -46,9 +46,12 @@ include_directories(
 
 )
 
-
-set(FZ_API ${PROJECT_SOURCE_DIR}/lib/x64/libfz_api.so.1)
-
+message(STATUS "Architecture: ${CMAKE_SYSTEM_PROCESSOR}")
+if( ${CMAKE_SYSTEM_PROCESSOR} STREQUAL "x86_64" )
+  set(FZ_API ${PROJECT_SOURCE_DIR}/lib/x86_64/libfz_api.so.1)
+else()
+  set(FZ_API ${PROJECT_SOURCE_DIR}/lib/i386/libfz_api.so.1)
+endif()
 
 ## Declare a cpp executable
 add_executable(fotonic_3dcamera_node src/fotonic_3dcamera_node.cpp src/camera.cpp)
