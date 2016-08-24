@@ -23,6 +23,12 @@
 //control operations
 #define CMD_DE_SENSOR_START                 0x4001
 #define CMD_DE_SENSOR_STOP                  0x4002
+#define CMD_DE_RESET                        0x4023
+#define CMD_DE_COLOR_SENSOR_START			0x4045
+#define CMD_DE_COLOR_SENSOR_STOP			0x4046
+
+#define CMD_DE_STREAM_ON                    0x4047
+#define CMD_DE_STREAM_OFF                   0x4048
 
 //set operation parameters
 #define CMD_DE_SET_SHUTTER                  0x4003
@@ -59,6 +65,13 @@ typedef struct
 #define CMD_DE_SET_SATURATION_GT_A_MINUS_B  0x4106 //only device type Jaguar
 #define CMD_DE_SET_EDGE_FILTER              0x4108 //device type Primesense: ignored
 #define CMD_DE_SET_LERP_FILTER              0x4109 //device type Primesense: ignored
+#define CMD_DE_SET_SMF_FILTER               0x410A //device type Primesense: ignored
+#define CMD_DE_SET_FILTER_CONTROL            0x410B //device type Primesense: ignored
+#define CMD_DE_SET_BRIGHTNESS_THRESHOLD     0x410C //device type Primesense: ignored
+#define CMD_DE_SET_BRIGHTNESS_STRETCH		0x410D //device type Primesense: ignored
+#define CMD_DE_SET_MEDIAN_FILTER			0x410E //device type Primesense: ignored
+#define CMD_DE_SET_LIGHT_PWR                0x502D //only device type PA
+#define CMD_DE_SET_LSSWITCH					0x4006 //only device type PA
 
 //get operation parameters
 #define CMD_DE_GET_SHUTTER                  0x5001
@@ -72,6 +85,8 @@ typedef struct
 #define CMD_DE_GET_FPS_DIVISOR              0x502A
 #define CMD_DE_GET_LIGHT_FRQ                0x502B //only device type PA
 #define CMD_DE_GET_LIGHT_PWR                0x502C //only device type PA
+
+
 
 //get version/serial number information
 #define CMD_DE_GET_UNIT_NO                  0x5007
@@ -91,7 +106,20 @@ typedef struct
 #define CMD_DE_GET_SATURATION_LT_A_MINUS_B  0x5105 //only device type Jaguar
 #define CMD_DE_GET_SATURATION_GT_A_MINUS_B  0x5106 //only device type Jaguar
 #define CMD_DE_GET_EDGE_FILTER              0x5108 //device type Primesense: fails
+#define CMD_DE_GET_LERP_FILTER              0x5109 //device type Primesense: fails
+#define CMD_DE_GET_SMF_FILTER               0x510A //device type Primesense: fails
+#define CMD_DE_GET_FILTER_CONTROL           0x510B //device type Primesense: fails
+#define CMD_DE_GET_BRIGHTNESS_THRESHOLD     0x510C //device type Primesense: ignored
+#define CMD_DE_GET_BRIGHTNESS_STRETCH		0x510D //device type Primesense: ignored
+#define CMD_DE_GET_MEDIAN_FILTER            0x510E //device type Primesense: ignored
 
+// Dual sensor commands
+#define CMD_DE_REGISTRATION_MODE            0x8030 // 1 = Register to RGB-camera, 0 = off
+#define CMD_CA_GET_LDC_CALIB                0x8031 // Internal use
+#define CMD_DE_SET_COLOR_TEMP               0x8032 // 2800 - 8000 (K)
+#define CMD_DE_AUTO_WHITEBALANCE            0x8033 // 1 = on, 0 = off
+#define CMD_DE_AUTO_BLACKLEVEL              0x8034 // 1 = on, 0 = off
+#define CMD_DE_SET_SUBSAMPLING              0x8035 // 1 (default), 2, or 4
 //--RESPONSE CODES--
 #define R_CMD_DE_ACK                        0x6001
 #define R_CMD_DE_NACK                       0x6002
@@ -125,5 +153,12 @@ typedef struct
 #define DE_MODE_320X240_30                  0x17
 #define DE_MODE_320X240_60                  0x18
 #define DE_MODE_640X480_30                  0x19
+//primesense_c
+#define DE_MODE_320X240_320X240				0x20
+#define DE_MODE_320X240_640X480				0x21
+#define DE_MODE_640X480_320X240				0x22
+#define DE_MODE_640X480_640X480				0x23
+#define DE_MODE_320X240_1280X960			0x24
+#define DE_MODE_640X480_1280X960			0x25
 
 #endif

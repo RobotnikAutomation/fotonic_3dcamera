@@ -36,8 +36,8 @@
 #define FZ_DEFAULT_COMMAND_TCPPORT 1289 // default port on camera for commands (camera replies the port on enumeration)
 #define FZ_DEFAULT_IMAGE_TCPPORT   (FZ_DEFAULT_COMMAND_TCPPORT+1) // default port on camera for images
 
-#define FZ_MAX_ROWS_PER_FRAME      640
-#define FZ_MAX_COLS_PER_FRAME      480
+#define FZ_MAX_ROWS_PER_FRAME      1280
+#define FZ_MAX_COLS_PER_FRAME      960
 #define FZ_MAX_BYTES_PER_PIXEL     14
 
 typedef enum {
@@ -93,7 +93,8 @@ typedef struct
 	uint16_t ncols;                                // image width
 	uint32_t framecounter;                         // frame number
 	uint32_t lasterrorframe;                       // last framecounter with an error
-	uint32_t shutter;                              // shutter time (10*ms)
+	uint16_t shutter;                              // shutter time (10*ms)
+	uint16_t shutter2;							   // shutter2 time (10*ms)
 	uint32_t mode;                                 // camera operation mode
 	uint32_t reportedframerate;                    // camera frame rate
 	uint32_t measuredframerate;                    // frame rate messured by pc
@@ -106,6 +107,9 @@ typedef struct
 #define FZ_DEVICE_TYPE_JAGUAR          0x0
 #define FZ_DEVICE_TYPE_PANASONIC       0x1
 #define FZ_DEVICE_TYPE_PRIMESENSE      0x2
+#define FZ_DEVICE_TYPE_RGBZ            0x3
+#define FZ_DEVICE_TYPE_PRIMESENSE_C	   0x4
+#define FZ_DEVICE_TYPE_PRIMESENSE_N	   0x5
 
 typedef struct
 {
@@ -165,6 +169,7 @@ FZ_API FZ_Result FZ_IOCtl(
 #define FZ_FMT_PIXEL_INTERLEAVED       0x0100 //components are grouped per pixel ([BZ...][BZ...][BZ...]...)
 #define FZ_FMT_PIXEL_PER_PLANE         0x0200 //components are grouped per plane ([WIDTHxB][WIDTHxZ]...)
 #define FZ_FMT_PROCESS_MIRROR          0x0400 //mirrors all data positions
+#define FZ_FMT_PROCESS_Z_FULLSCALE5M   0x4000 //re-scale Z values to int16 fullscale @ 5m, i.e. (z_mm * 65535) / 5000
 #define FZ_FMT_PROCESS_INVERTY         0x8000 //all Y values multiplied with -1
 
 FZ_API FZ_Result FZ_SetFrameDataFmt(
@@ -231,6 +236,70 @@ FZ_API FZ_Result FZ_SendFrameToChannel(
 FZ_API FZ_Result FZ_GetFrameFromChannel( //blocking with 5 sec timeout
 	int iChannel,
 	FZ_FRAME_HEADER *pHeader,
+	void *pPixels,
+	size_t *piPixelsByteLen);
+
+
+#ifdef FZAPI_INTERNAL
+//note: bOnlyDepthEnginePC is depricated and should be set to false
+FZ_API FZ_Result FZ_SetConfigCalib(
+	FZ_Device_Handle_t hDev,
+	const char *szPath,
+	bool bOnlyDepthEnginePC = false);
+
+FZ_API FZ_Result FZ_SetConfigCalib2(
+	FZ_Device_Handle_t hDev,
+	const char *szPath);
+
+FZ_API FZ_Result FZ_SendTable(
+	FZ_Device_Handle_t hDev,
+	int iType,
+	void *pData,
+	int iDataSize);
+#endif
+
+//this is the header returned from hardware
+#pragma pack(2)
+typedef struct
+{
+	int16_t  magic_number;                         // mark the start of this frame
+	uint8_t  version;                              // frame version
+	uint8_t  pixelformat;                          // 0 for all but primesense
+	uint32_t ExpStartSec;                          // start of exposure in seconds
+	uint16_t ExpStartMSec;                         // start of exposure milliseconds
+	uint16_t bytesperpixel;                        // number of bytes in a pixel
+	uint16_t nrows;                                // image height
+	uint16_t ncols;                                // image width
+	uint32_t processedframecounter;                // processed frame number
+	uint32_t shippedframecounter;                  // shipped frame number
+	uint16_t ExpDuration;                          // used as expired time from start of exposure in milliseconds
+	int32_t  temperature;                          // chip temperature (10*celcius)
+	uint32_t captureid;                            // current frame in the order (useful for raw mode)
+	uint16_t shutter;                              // shutter time (10*ms)
+	uint16_t shutter2;							   // shutter2 time (10*ms)
+	uint32_t cmr;
+	uint32_t reportedframerate;                    // camera frame rate
+	uint32_t frequency;                            // light pulse frequency
+	uint32_t mode;                                 // camera operation mode
+	uint32_t measuredframerate;                    // frame rate messured by pc
+	uint32_t lasterrorframe;                       // last processedframecounter with an error
+	uint16_t dll1;
+	uint16_t dll2;
+	uint16_t dllerr;
+} FZ_FRAME_HEADER_EXT; //defined as FZ_LL_FRAME_HEADER
+#pragma pack()
+
+FZ_API FZ_Result FZ_GetFrameExt(
+	FZ_Device_Handle_t hDev,
+	FZ_FRAME_HEADER_EXT *pHeader,
+	void *pPixels,
+	size_t *piPixelsByteLen);
+
+FZ_API FZ_Result FZ_GetFrameARGB(
+	FZ_Device_Handle_t hDev,
+	int *xres, int *yres,
+	uint32_t *ExpStartSec,
+	uint16_t *ExpStartMSec,
 	void *pPixels,
 	size_t *piPixelsByteLen);
 
